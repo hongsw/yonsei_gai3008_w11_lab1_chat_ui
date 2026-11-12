@@ -3,6 +3,15 @@
 > 목표: **보내고 받는 모양**을 먼저 만든다. API는 다음 실습에서 붙인다.
 > 할 일 1·3·5는 완성되어 있고, 2·4번은 코드 안의 `TODO` 주석으로 안내한다.
 
+## 화면
+
+| 대화 | 응답을 기다리는 동안 (타이핑 말풍선) |
+|---|---|
+| ![채팅 화면](docs/screenshot.png) | ![타이핑 말풍선](docs/screenshot-typing.png) |
+
+AI가 응답하는 동안 목록 맨 아래에 점이 **1개 → 2개 → 3개**로 늘어나며 튀는 말풍선이 뜬다.
+(전송 버튼은 그동안 잠기고, 답변이 도착하면 다시 활성화된다.)
+
 ## 실행
 
 ```bash
@@ -24,6 +33,13 @@ flutter run -d chrome      # 또는 -d <에뮬레이터>
 
 `lib/main.dart`에서 `TODO 2`·`TODO 4`를 검색하면 해당 위치로 바로 간다.
 
+## 타이핑 말풍선
+
+- `_send()`가 `_sending = true`로 바꾸면 목록 맨 아래(가장 최근)에 `_TypingBubble`이 붙는다.
+- `AnimationController` 하나로 **점 개수(1→2→3)** 와 **점 크기(튀어 오름)** 를 동시에 만든다.
+- `typingDuration`(기본 10초) 동안 계속 반복되고, 답변이 도착하면 사라진다.
+- 사이클 시간은 `_TypingBubbleState._dotCycle`(1.2초) 하나로 조절한다.
+
 ## 완료 기준 (수업 중 통과)
 
 - 말풍선이 **좌우로** 나뉜다
@@ -41,7 +57,8 @@ flutter run -d chrome      # 또는 -d <에뮬레이터>
 ## 구조
 
 ```
-lib/main.dart          ← 실습 파일 (TODO 2~5)
+lib/main.dart          ← 실습 파일 (TODO 2, 4)
+docs/                  ← README에 쓰는 화면 캡처
 test/widget_test.dart  ← 앱이 뜨는지 확인하는 스모크 테스트
 ```
 
