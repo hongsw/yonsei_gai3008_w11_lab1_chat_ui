@@ -34,8 +34,8 @@ void main() {
     final button = tester.widget<IconButton>(find.byType(IconButton));
     expect(button.onPressed, isNull);
 
-    // 3) 2초 뒤 타이핑 말풍선이 사라지고 AI 답변이 붙는다
-    await tester.pump(const Duration(seconds: 2));
+    // 3) 타이핑 말풍선이 사라지고 AI 답변이 붙는다 (typingDuration = 10초)
+    await tester.pump(const Duration(seconds: 10));
     await tester.pumpAndSettle();
     expect(find.textContaining('실제 응답은 다음 실습에서'), findsOneWidget);
   });

@@ -35,6 +35,10 @@ class ChatPage extends StatefulWidget {
 }
 
 class _ChatPageState extends State<ChatPage> {
+  /// 타이핑 말풍선이 화면에 머무는 시간.
+  /// 점이 계속 반복되며 도는 동안 AI가 "생각 중"이라는 신호를 보낸다.
+  static const Duration typingDuration = Duration(seconds: 10);
+
   /// 실습용 가짜 대화 — API를 붙이기 전까지 이 목록으로 화면을 만든다.
   /// (const가 아니라 growable 리스트여야 나중에 _send()에서 add할 수 있다.)
   final List<ChatMessage> _messages = [
@@ -44,7 +48,7 @@ class _ChatPageState extends State<ChatPage> {
     const ChatMessage(text: '응답이 1초를 넘으면 앱이 멈춘 것처럼 보이기 때문입니다.', isUser: false),
   ];
 
-  /// AI가 응답을 만드는 중인가? true인 동안 목록 맨 아래에 점 3개 말풍선이 뜬다.
+  /// AI가 응답을 만드는 중인가? true인 동안 목록 맨 아래에 점 말풍선이 뜬다.
   bool _sending = false;
 
   /// 입력창의 글자를 들고 있는 컨트롤러. dispose()에서 반드시 정리한다.
@@ -56,7 +60,7 @@ class _ChatPageState extends State<ChatPage> {
     super.dispose();
   }
 
-  /// 보내기 — 지금은 서버가 없으니 2초 뒤 가짜 답변을 넣는다.
+  /// 보내기 — 지금은 서버가 없으니 [typingDuration] 뒤에 가짜 답변을 넣는다.
   /// 12주차에 await Future.delayed(...) 자리가 실제 API 호출로 바뀐다.
   Future<void> _send() async {
     if (_sending) return; // 응답 전에 또 보내는 것 방지
@@ -69,7 +73,7 @@ class _ChatPageState extends State<ChatPage> {
       _sending = true; // ← 타이핑 말풍선 등장
     });
 
-    await Future<void>.delayed(const Duration(seconds: 2));
+    await Future<void>.delayed(typingDuration);
 
     // await 뒤에는 위젯이 이미 사라졌을 수 있다. setState 전에 반드시 확인.
     if (!mounted) return;
@@ -237,9 +241,13 @@ class _TypingBubble extends StatefulWidget {
 
 class _TypingBubbleState extends State<_TypingBubble>
     with SingleTickerProviderStateMixin {
+  /// 점이 1개 → 2개 → 3개 → 1개 … 로 한 바퀴 도는 시간.
+  /// 이 사이클이 [_ChatPageState.typingDuration] 동안 계속 반복된다.
+  static const Duration _dotCycle = Duration(milliseconds: 1200);
+
   late final AnimationController _controller = AnimationController(
     vsync: this,
-    duration: const Duration(milliseconds: 1200),
+    duration: _dotCycle,
   )..repeat();
 
   @override
