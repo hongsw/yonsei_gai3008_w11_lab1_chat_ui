@@ -8,7 +8,7 @@ class ChatLabApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'AI Chat — 실습 1',
+      title: '실습 1 - 단계 2',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF2F6FE4)),
@@ -96,7 +96,7 @@ class _ChatPageState extends State<ChatPage> {
       // ✅ 할 일 5 — 키보드가 입력창을 가리지 않게
       //   resizeToAvoidBottomInset은 기본값이 true라 body가 키보드 높이만큼 줄어든다.
       //   SafeArea가 홈 인디케이터/노치를 피한다. (별도 설정 불필요)
-      appBar: AppBar(title: const Text('AI Chat — 실습 1')),
+      appBar: AppBar(title: const Text('실습 1 - 단계 2')),
       body: SafeArea(
         child: Column(
           children: [
